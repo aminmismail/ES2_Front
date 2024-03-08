@@ -217,7 +217,7 @@
         dataNasc: '',
         raça: '',
         especialidade: {
-          id: '',
+          id: 0,
           descricao: ''
         }
       },
@@ -229,7 +229,7 @@
         dataNasc: '',
         raça: '',
         especialidade: {
-          id: '',
+          id: 0,
           descricao: ''
         }
       }
@@ -259,10 +259,10 @@
 
     methods: {
 
-      getIDbyDesc(){
-        for (let i = 0; i < especialidades.length; i++) {
-        if (especialidades[i].descricao === descricao) {
-            return especialidades[i].id;
+      getIDbyDesc(desc){
+        for (let i = 0; i < this.especialidades.length; i++) {
+        if (this.especialidades[i].descricao === desc) {
+            return this.especialidades[i].id;
           }
         }
         return -1;
@@ -308,10 +308,7 @@
 
       async postProfissionais(item){
         
-        console.log(item)
-        item.especialidade = 2;
-        item.id = 50;
-        console.log(item)
+        item.especialidade = this.getIDbyDesc(item.especialidade.descricao);
 
         const dataJson = JSON.stringify(item);
 
