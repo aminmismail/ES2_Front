@@ -5,7 +5,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/profissionais' // Redireciona a raiz para /other-page
+      redirect: '/profissionais'
     },
     {
       path: '/profissionais',
