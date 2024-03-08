@@ -254,6 +254,13 @@
 
     methods: {
       
+      async getEspecialidades() {
+        const response = await fetch("http://localhost:3000/especialidade");
+        const data = await response.json();
+        
+        
+      },
+
       async getProfissionais() {
           const response = await fetch("http://localhost:3000/profissional");
           const data = await response.json();
@@ -261,7 +268,13 @@
         },
         
         async putProfissionais(item){
-          const id = item.id;
+          const id = item.id
+          
+          especialidade_id = item.especialidade.id
+
+          delete item['especialidade']
+
+          Object.assign(item, {})
           
           const dataJson = JSON.stringify(item);
   
