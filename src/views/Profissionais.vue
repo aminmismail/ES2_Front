@@ -121,7 +121,7 @@
                       <v-select
                       label="Selecione a especialidade"
                       v-model="editedItem.especialidade.descricao"
-                      :items="['Analista', 'Dev', 'Seguranca', 'Tester']"
+                      :items="desc_especialidades"
                       :rules="[required]"
                       ></v-select>
                     </v-col>
@@ -194,6 +194,8 @@
     data: () => ({
       dialog: false,
       dialogDelete: false,
+      especialidades: [],
+      desc_especialidades: [],
       headers: [
         {
           title: 'ID',
@@ -231,6 +233,15 @@
           descricao: ''
         }
       },
+      postItem: {
+        id: '',
+        nome: '',
+        endereço: '',
+        genero: '',
+        dataNasc: '',
+        raça: '',
+        especialidade: 0
+      }
     }),
 
     computed: {
@@ -249,69 +260,80 @@
     },
 
     mounted(){
+      this.getEspecialidades().then(() => {
+        this.desc_especialidades = this.especialidades.map(esp => esp.descricao);
         this.getProfissionais();
+    });
     },
 
     methods: {
-      
+
+      getIDbyDesc(){
+        for (let i = 0; i < especialidades.length; i++) {
+        if (especialidades[i].descricao === descricao) {
+            return especialidades[i].id;
+          }
+        }
+        return null;
+      },
+
       async getEspecialidades() {
         const response = await fetch("http://localhost:3000/especialidade");
         const data = await response.json();
-        
-        //Map JSON OBJECT
+        this.especialidades = data;
       },
 
       async getProfissionais() {
           const response = await fetch("http://localhost:3000/profissional");
           const data = await response.json();
           this.profissionais = data;
-        },
+      },
         
-        async putProfissionais(item){
-          const id = item.id
-          
-          especialidade_id = item.especialidade.id
+      async putProfissionais(item){
+        const id = item.id
+        
+        especialidade_id = item.especialidade.id
 
-          delete item['especialidade']
+        delete item['especialidade']
 
-          Object.assign(item, {})
-          
-          const dataJson = JSON.stringify(item);
+        Object.assign(item, {})
+        
+        const dataJson = JSON.stringify(item);
+
+        const req = await fetch(`http://localhost:3000/profissional/${id}`, {
+          method: "PATCH",
+          headers: {"Content-Type": "application/json"},
+          body: dataJson
+        });
+
+        this.getProfissionais();
+
+      },
   
-          const req = await fetch(`http://localhost:3000/profissional/${id}`, {
-            method: "PATCH",
-            headers: {"Content-Type": "application/json"},
-            body: dataJson
-          });
+      async deleteProfissionais(id){
+        const req = await fetch(`http://localhost:3000/profissional/${id}`, {
+          method: "DELETE"
+        });
 
-          this.getProfissionais();
+        const res = await req.json();
 
-        },
-  
-        async deleteProfissionais(id){
-          const req = await fetch(`http://localhost:3000/profissional/${id}`, {
-            method: "DELETE"
-          });
+        this.getProfissionais();
 
-          const res = await req.json();
-  
-          this.getProfissionais();
-  
-        },
+      },
 
-        async postProfissionais(item){
-          
-          const dataJson = JSON.stringify(item);
-  
-          const req = await fetch(`http://localhost:3000/profissional`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: dataJson
-          });
+      async postProfissionais(item){
+        
+        const dataJson = JSON.stringify(item);
 
-          this.getProfissionais();
+        const req = await fetch(`http://localhost:3000/profissional`, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: dataJson
+        });
 
-        },
+        this.getProfissionais();
+
+      },
 
       
       dataFormat(date) {

@@ -37,7 +37,7 @@
       }
     },
     {
-      "id": "",
+      "id": "3",
       "nome": "Uilha",
       "endereço": "Rua caralhos",
       "genero": "Bixa",
@@ -48,5 +48,20 @@
         "descricao": "Analista"
       }
     }
-  ]
+  ],
+  "especialidade":
+        [
+            {
+                "id": 1,
+                "descricao": "Developer"
+            },
+            {
+                "id": 2,
+                "descricao": "DBA"
+            },
+            {
+                "id": 3,
+                "descricao": "Designer"
+            }
+        ]
 }
