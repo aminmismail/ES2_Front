@@ -1,0 +1,30 @@
+{
+    "profissionais": [
+    {
+        "id": 1,
+        "nome": "Jorge",
+        "endereco": "Rua Curitiba, 615",
+        "nascimento": "12/1/1998",
+        "genero": "M",
+        "raca": "Ariana",
+        "especialidade": "Assassino"
+    },
+    {
+        "id": 2,
+        "nome": "Maria Torres",
+        "endereco": "Avenida Paulista, 1000",
+        "nascimento": "5/8/1990",
+        "genero": "F",
+        "raca": "Caucasiana",
+        "especialidade": "Engenheira"
+    },
+    {
+        "id": 3,
+        "nome": "Pedro Silva",
+        "endereco": "Rua São Paulo, 200",
+        "nascimento": "20/3/1985",
+        "genero": "M",
+        "raca": "Parda",
+        "especialidade": "Professor"
+    }]
+}
