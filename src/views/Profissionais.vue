@@ -258,7 +258,7 @@
         const response = await fetch("http://localhost:3000/especialidade");
         const data = await response.json();
         
-        
+        //Map JSON OBJECT
       },
 
       async getProfissionais() {
