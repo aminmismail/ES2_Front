@@ -9,31 +9,7 @@
       "raça": "Caucasiana",
       "especialidade": {
         "id": 1,
-        "descricao": "Seguranca"
-      }
-    },
-    {
-      "id": "3",
-      "nome": "Pedro Silva",
-      "endereço": "Rua São Paulo, 200",
-      "genero": "M",
-      "dataNasc": "10/10/2001",
-      "raça": "Parda",
-      "especialidade": {
-        "id": 2,
-        "descricao": "Dev"
-      }
-    },
-    {
-      "id": "102",
-      "nome": "José Alberto Silveira Santos",
-      "endereço": "Rua rua rua",
-      "genero": "Masculino",
-      "dataNasc": "11/1/1995",
-      "raça": "Branco",
-      "especialidade": {
-        "id": 3,
-        "descricao": "Tester"
+        "descricao": "DBA"
       }
     },
     {
@@ -45,7 +21,19 @@
       "raça": "Abominavel",
       "especialidade": {
         "id": "",
-        "descricao": "Analista"
+        "descricao": "DBA"
+      }
+    },
+    {
+      "id": "102",
+      "nome": "José Alberto Silveira Santos",
+      "endereço": "Rua rua rua",
+      "genero": "Masculino",
+      "dataNasc": "11/1/1995",
+      "raça": "Branco",
+      "especialidade": {
+        "id": 3,
+        "descricao": "Developer"
       }
     }
   ],

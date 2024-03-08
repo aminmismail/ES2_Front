@@ -283,16 +283,10 @@
       async putProfissionais(item){
         const id = item.id
         
-        especialidade_id = item.especialidade.id
-
-        delete item['especialidade']
-
-        Object.assign(item, {})
-        
         const dataJson = JSON.stringify(item);
 
         const req = await fetch(`http://localhost:3000/profissional/${id}`, {
-          method: "PATCH",
+          method: "PUT",
           headers: {"Content-Type": "application/json"},
           body: dataJson
         });
@@ -315,7 +309,8 @@
       async postProfissionais(item){
         
         console.log(item)
-        item.especialidade = 1;
+        item.especialidade = 2;
+        item.id = 50;
         console.log(item)
 
         const dataJson = JSON.stringify(item);
