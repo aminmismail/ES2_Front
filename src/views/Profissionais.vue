@@ -71,7 +71,7 @@
                       sm="6"
                     >
                       <v-text-field
-                        v-model="editedItem.endereco"
+                        v-model="editedItem.endereço"
                         label="Endereço"
                         :rules="[required]"
                       ></v-text-field>
@@ -82,7 +82,7 @@
                       sm="6"
                     >
                       <v-text-field
-                        v-model="editedItem.nascimento"
+                        v-model="editedItem.dataNasc"
                         label="Nascimento"
                         placeholder="DD/MM/AAAA"
                         hint="Utilize o formato DD/MM/AAAA. Exemplo: 02/10/2001"
@@ -107,7 +107,8 @@
                       sm="6"
                     >
                       <v-text-field
-                        v-model="editedItem.raca"
+                        v-model="editedItem.raça
+              "
                         label="Raça"
                         :rules="[required]"
                       ></v-text-field>
@@ -119,7 +120,7 @@
                     >
                       <v-select
                       label="Selecione a especialidade"
-                      v-model="editedItem.especialidade"
+                      v-model="editedItem.especialidade.descricao"
                       :items="['Analista', 'Dev', 'Seguranca', 'Tester']"
                       :rules="[required]"
                       ></v-select>
@@ -201,7 +202,7 @@
           key: 'id',
         },
         { title: 'Nome', key: 'nome' },
-        { title: 'Especialidade', key: 'especialidade' },
+        { title: 'Especialidade', key: 'especialidade.descricao' },
         { title: 'Ações', key: 'actions', sortable: false },
       ],
       profissionais: [],
@@ -209,20 +210,26 @@
       editedItem: {
         id: '',
         nome: '',
-        endereco: '',
-        nascimento: '',
+        endereço: '',
         genero: '',
-        raca: '',
-        especialidade: '',
+        dataNasc: '',
+        raça: '',
+        especialidade: {
+          id: '',
+          descricao: ''
+        }
       },
       defaultItem: {
         id: '',
         nome: '',
-        endereco: '',
-        nascimento: '',
+        endereço: '',
         genero: '',
-        raca: '',
-        especialidade: '',
+        dataNasc: '',
+        raça: '',
+        especialidade: {
+          id: '',
+          descricao: ''
+        }
       },
     }),
 
@@ -241,16 +248,41 @@
       },
     },
 
-
-    async mounted() {
-      const response = await fetch("http://localhost:3000/profissionais");
-      const data = await response.json();
-      this.profissionais = data;
+    mounted(){
+        this.getProfissionais();
     },
 
-
     methods: {
+      
+      async getProfissionais() {
+        const response = await fetch("http://localhost:3000/profissionais");
+        const data = await response.json();
+        this.profissionais = data;
+      },
+      
+      async postProfissionais(item){
+        const id = item.id;
+        const dataJson = JSON.stringify(item);
+        
+        const req = await fetch(`http://localhost:3000/profissionais/${id}`, {
+          method: "PATCH",
+          headers: {"Content-Type": "application/json"},
+          body: dataJson
+        });
+      },
 
+      async deleteProfissionais(id){
+        const req = await fetch(`http://localhost:3000/profissionais/${id}`, {
+          method: "DELETE"
+        });
+
+        const res = await req.json();
+
+        this.getProfissionais();
+
+      },
+
+      
       dataFormat(date) {
         const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/
         return dateRegex.test(date) || 'Data deve estar no formato DD/MM/AAAA';
@@ -259,6 +291,7 @@
       required(inp){
         return !!inp || "Campo obrigatório"
       },
+
 
       editItem (item) {
         this.editedIndex = this.profissionais.indexOf(item)
@@ -287,6 +320,7 @@
 
       closeDelete () {
         this.dialogDelete = false
+        this.deleteProfissionais(this.editedItem.id)
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
@@ -296,18 +330,16 @@
       save () {
         if (this.editedIndex > -1) {
           Object.assign(this.profissionais[this.editedIndex], this.editedItem)
-        } 
+        }
         else {
           this.profissionais.push(this.editedItem)
         }
-        this.close()
-      },
+        console.log(this.editedItem)
+        this.postProfissionais(this.editedItem);
 
-      parseData(data){
-        var parts = data.split('/');
-        return parts[2] + '-' + parts[1] + '-' + parts[0];
-      },
-    },
+        this.close()
+      }
+    }
   }
 
 </script>
