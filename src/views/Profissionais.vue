@@ -255,32 +255,44 @@
     methods: {
       
       async getProfissionais() {
-        const response = await fetch("http://localhost:3000/profissionais");
-        const data = await response.json();
-        this.profissionais = data;
-      },
-      
-      async postProfissionais(item){
-        const id = item.id;
-        const dataJson = JSON.stringify(item);
+          const response = await fetch("http://localhost:3000/profissional");
+          const data = await response.json();
+          this.profissionais = data;
+        },
         
-        const req = await fetch(`http://localhost:3000/profissionais/${id}`, {
-          method: "PATCH",
-          headers: {"Content-Type": "application/json"},
-          body: dataJson
-        });
-      },
+        async putProfissionais(item){
+          const id = item.id;
+          
+          const dataJson = JSON.stringify(item);
+  
+          const req = await fetch(`http://localhost:3000/profissional/${id}`, {
+            method: "PATCH",
+            headers: {"Content-Type": "application/json"},
+            body: dataJson
+          });
+        },
+  
+        async deleteProfissionais(id){
+          const req = await fetch(`http://localhost:3000/profissional/${id}`, {
+            method: "DELETE"
+          });
 
-      async deleteProfissionais(id){
-        const req = await fetch(`http://localhost:3000/profissionais/${id}`, {
-          method: "DELETE"
-        });
+          const res = await req.json();
+  
+          this.getProfissionais();
+  
+        },
 
-        const res = await req.json();
-
-        this.getProfissionais();
-
-      },
+        async postProfissionais(item){
+          
+          const dataJson = JSON.stringify(item);
+  
+          const req = await fetch(`http://localhost:3000/profissional`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: dataJson
+          });
+        },
 
       
       dataFormat(date) {
@@ -330,13 +342,12 @@
       save () {
         if (this.editedIndex > -1) {
           Object.assign(this.profissionais[this.editedIndex], this.editedItem)
+          this.putProfissionais(this.editedItem)
         }
         else {
           this.profissionais.push(this.editedItem)
+          this.postProfissionais(this.editedItem)
         }
-        console.log(this.editedItem)
-        this.postProfissionais(this.editedItem);
-
         this.close()
       }
     }
