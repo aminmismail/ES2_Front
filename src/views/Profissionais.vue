@@ -232,15 +232,6 @@
           id: '',
           descricao: ''
         }
-      },
-      postItem: {
-        id: '',
-        nome: '',
-        endereço: '',
-        genero: '',
-        dataNasc: '',
-        raça: '',
-        especialidade: 0
       }
     }),
 
@@ -274,7 +265,7 @@
             return especialidades[i].id;
           }
         }
-        return null;
+        return -1;
       },
 
       async getEspecialidades() {
@@ -323,6 +314,10 @@
 
       async postProfissionais(item){
         
+        console.log(item)
+        item.especialidade = 1;
+        console.log(item)
+
         const dataJson = JSON.stringify(item);
 
         const req = await fetch(`http://localhost:3000/profissional`, {
@@ -382,11 +377,11 @@
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.profissionais[this.editedIndex], this.editedItem)
+          //Object.assign(this.profissionais[this.editedIndex], this.editedItem)
           this.putProfissionais(this.editedItem)
         }
         else {
-          this.profissionais.push(this.editedItem)
+          //this.profissionais.push(this.editedItem)
           this.postProfissionais(this.editedItem)
         }
         this.close()

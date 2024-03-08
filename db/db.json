@@ -49,19 +49,18 @@
       }
     }
   ],
-  "especialidade":
-        [
-            {
-                "id": 1,
-                "descricao": "Developer"
-            },
-            {
-                "id": 2,
-                "descricao": "DBA"
-            },
-            {
-                "id": 3,
-                "descricao": "Designer"
-            }
-        ]
+  "especialidade": [
+    {
+      "id": 1,
+      "descricao": "Developer"
+    },
+    {
+      "id": 2,
+      "descricao": "DBA"
+    },
+    {
+      "id": 3,
+      "descricao": "Designer"
+    }
+  ]
 }
