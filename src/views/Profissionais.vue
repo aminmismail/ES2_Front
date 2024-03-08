@@ -270,6 +270,9 @@
             headers: {"Content-Type": "application/json"},
             body: dataJson
           });
+
+          this.getProfissionais();
+
         },
   
         async deleteProfissionais(id){
@@ -292,6 +295,9 @@
             headers: {"Content-Type": "application/json"},
             body: dataJson
           });
+
+          this.getProfissionais();
+
         },
 
       
