@@ -21,7 +21,7 @@
 
             <v-dialog
               v-model="dialog"
-              max-width="80%"
+              max-width="50%"
             >
               <template v-slot:activator="{ props }">
                 <v-btn
@@ -38,7 +38,7 @@
               <div>
                   <v-card>
                     <v-card-title>
-                      <span class="text-h5">{{ formTitle }}</span>
+                      <span class="text-h5">Adicionar Time</span>
                     </v-card-title>
         
                     <!-- Formulario de add/editar o time -->
@@ -46,14 +46,13 @@
                         <v-container>
                         <v-row justify="center">
                           <v-col
-                            cols="12"
-                            md="4"
-                            sm="6"
+                            cols="18"
+                            md="14"
+                            sm="10"
                           >
                             <v-text-field
-                              v-model="editedItem.nome"
+                              v-model="editedItem.nomeTime"
                               label="Nome do Time"
-                              :rules="[required]"
                             ></v-text-field>
                           </v-col>
                         </v-row>
@@ -93,6 +92,67 @@
               </v-card>
             </v-dialog>
           </v-toolbar>
+
+          <!-- Dialogo de SHOW do Time -->
+          <v-dialog
+              v-model="show"
+              max-width="80%"
+            >
+
+              <div>
+                  <v-card>
+                    <v-card-title>
+                      <span class="text-h5">Informações do Time</span>
+                    </v-card-title>
+        
+                    <v-card-text>
+                        <v-container>
+                        <v-row>
+                          <v-col
+                            cols="12"
+                            md="4"
+                            sm="6"
+                          >
+                            <v-text-field
+                              v-model="editedItem.nomeTime"
+                              label="Nome do Time"
+                              :rules="[required]"
+                              readonly
+                            ></v-text-field>
+                          </v-col>
+
+                          <v-col
+                            cols="12"
+                            md="4"
+                            sm="6"
+                          >
+                          <v-card
+                            class="mx-auto"
+                            max-width="300">
+
+                            <v-list-subheader >Profissionais</v-list-subheader>
+                            <v-list :items="this.profsTime" variant="tonal" bg-color="#383131">
+                            </v-list>
+                        </v-card>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-card-text>
+        
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        color="red-darken-1"
+                        variant="text"
+                        @click="close"
+                      >
+                        Cancelar
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+              </div>
+            </v-dialog>
+
         </template>
         
         <template v-slot:item.actions="{ item }">
@@ -113,7 +173,6 @@
               >
               </v-icon>
     
-                
               <v-icon
                 class="me-2"
                 size="small"
@@ -145,6 +204,7 @@
       data: () => ({
         dialog: false,
         dialogDelete: false,
+        show: false,
         headers: [
           {
             title: 'ID',
@@ -158,25 +218,20 @@
         times: [],
         profissionais: [],
         nomesProf: [],
+        profsTime: [],
         editedIndex: -1,
         editedItem: {
-          id: '',
+          id: 0,
           nomeTime: '',
           idProfissionais: []
         },
         defaultItem: {
-          id: '',
+          id: 0,
           nomeTime: '',
           idProfissionais: []
         }
       }),
-  
-      computed: {
-        formTitle () {
-          return this.editedIndex === -1 ? 'Novo time' : 'Editar time'
-        },
-      },
-  
+
       watch: {
         dialog (val) {
           val || this.close()
@@ -193,12 +248,19 @@
   
       methods: {
 
+        getProfsNoTime(idTime) {
+            this.profsTime = this.times
+            .filter(time => time.id === idTime)
+            .map(time => time.idProfissionais)
+            .reduce((nomes, profissionais) => nomes.concat(profissionais.map(profissional => `${profissional.nome} - (${profissional.especialidade.descricao})`)), []);
+        },
+
         getIDProf(nome){
             return this.profissionais.find(profissional => profissional.nome === nome).id;
         },
 
         getNomes(){
-            nomesProf = [];
+            this.nomesProf = [];
             this.profissionais.forEach(profissional => {
                 this.nomesProf.push(profissional.nome);
             });
@@ -216,7 +278,6 @@
             const response = await fetch("http://localhost:3000/time");
             const data = await response.json();
             this.times = data;
-            console.log(this.times)
         },
         
           
@@ -232,29 +293,29 @@
             body: dataJson
           });
   
-          this.gettimes();
+          this.getTimes();
   
         },
     
         //DELETE -> Deletar um time
-        async deletetimes(id){
+        async deleteTimes(id){
           const req = await fetch(`http://localhost:3000/time/${id}`, {
             method: "DELETE"
           });
   
           const res = await req.json();
   
-          this.gettimes();
+          this.getTimes();
   
         },
-  
+
+
         //POST/time -> Adicionar um time vazio
         //POST/idTime/idProfissional -> Adicionar um prof ao time
-        async postTimes(item){
-          
-          item.especialidade = this.getIDbyDesc(item.especialidade.descricao);
-  
-          const dataJson = JSON.stringify(item);
+        async postTime(nome){
+
+          const dado = {"nomeTime": nome}
+          const dataJson = JSON.stringify(dado);
   
           const req = await fetch(`http://localhost:3000/time`, {
             method: "POST",
@@ -262,20 +323,21 @@
             body: dataJson
           });
   
-          //this.getTimes();
+          this.getTimes();
   
         },
   
-  
+
+        
         required(inp){
           return !!inp || "Campo obrigatório"
         },
   
-  
         viewTeam(item) {
           this.editedIndex = this.times.indexOf(item)
           this.editedItem = Object.assign({}, item)
-          this.dialog = true
+          this.getProfsNoTime(this.editedItem.id);
+          this.show = true
         },
   
         deleteTeam (item) {
@@ -290,6 +352,7 @@
         },
   
         close () {
+          this.show = false
           this.dialog = false
           this.$nextTick(() => {
             this.editedItem = Object.assign({}, this.defaultItem)
@@ -299,7 +362,7 @@
   
         closeDelete () {
           this.dialogDelete = false
-          //this.deleteTimes(this.editedItem.id)
+          this.deleteTimes(this.editedItem.id)
           this.$nextTick(() => {
             this.editedItem = Object.assign({}, this.defaultItem)
             this.editedIndex = -1
@@ -307,14 +370,7 @@
         },
   
         save () {
-          if (this.editedIndex > -1) {
-            Object.assign(this.times[this.editedIndex], this.editedItem)
-            //this.putTimes(this.editedItem)
-          }
-          else {
-            this.times.push(this.editedItem)
-            //this.postTimes(this.editedItem)
-          }
+          this.postTime(this.editedItem.nomeTime)
           this.close()
         }
       }
