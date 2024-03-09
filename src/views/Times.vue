@@ -142,16 +142,142 @@
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn
+                        color="blue-darken-1"
+                        variant="text"
+                        @click="close"
+                      >
+                        Fechar
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+              </div>
+            </v-dialog>
+
+            <v-dialog
+              v-model="add"
+              max-width="80%"
+            >
+              <div>
+                  <v-card>
+                    <v-card-title>
+                      <span class="text-h5">Adicionar um profissional</span>
+                    </v-card-title>
+        
+                    <v-card-text>
+                        <v-container>
+                        <v-row>
+                          <v-col
+                            cols="12"
+                            md="4"
+                            sm="6"
+                          >
+                            <v-text-field
+                              v-model="editedItem.nomeTime"
+                              label="Nome do Time"
+                              readonly
+                            ></v-text-field>
+                          </v-col>
+
+                          <v-col
+                            cols="12"
+                            md="4"
+                            sm="6"
+                          >
+                          <v-select 
+                            v-model="newProf"
+                            label="Selecione um profissional"
+                            :items="nomesProf"
+                            ></v-select>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-card-text>
+        
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
                         color="red-darken-1"
                         variant="text"
                         @click="close"
                       >
                         Cancelar
                       </v-btn>
+                      <v-btn
+                        color="green-darken-1"
+                        variant="text"
+                        @click="save"
+                      >
+                        Adicionar
+                      </v-btn>
+                      
                     </v-card-actions>
                   </v-card>
               </div>
             </v-dialog>
+
+
+            <v-dialog
+              v-model="rem"
+              max-width="80%"
+            >
+              <div>
+                  <v-card>
+                    <v-card-title>
+                      <span class="text-h5">Remover um profissional</span>
+                    </v-card-title>
+        
+                    <v-card-text>
+                        <v-container>
+                        <v-row>
+                          <v-col
+                            cols="12"
+                            md="4"
+                            sm="6"
+                          >
+                            <v-text-field
+                              v-model="editedItem.nomeTime"
+                              label="Nome do Time"
+                              readonly
+                            ></v-text-field>
+                          </v-col>
+
+                          <v-col
+                            cols="12"
+                            md="4"
+                            sm="6"
+                          >
+                          <v-select 
+                            v-model="newProf"
+                            label="Selecione um profissional"
+                            :items="profsTime"
+                            ></v-select>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-card-text>
+        
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        color="red-darken-1"
+                        variant="text"
+                        @click="close"
+                      >
+                        Cancelar
+                      </v-btn>
+                      <v-btn
+                        color="green-darken-1"
+                        variant="text"
+                        @click="save"
+                      >
+                        Remover
+                      </v-btn>
+                      
+                    </v-card-actions>
+                  </v-card>
+              </div>
+            </v-dialog>
+
 
         </template>
         
@@ -205,6 +331,9 @@
         dialog: false,
         dialogDelete: false,
         show: false,
+        add: false,
+        rem: false,
+        newProf: '',
         headers: [
           {
             title: 'ID',
@@ -282,18 +411,17 @@
         
           
         // PUT -> Remove prof do time
-        async putTimes(item){
-          const id_time = item.id
-          
-          const dataJson = JSON.stringify(item);
-  
-          const req = await fetch(`http://localhost:3000/time/${id}`, {
+        async putTimes(id_prof){
+
+            const id_time = this.editedItem.id
+            const req = await fetch(`http://localhost:3000/time/${id_time}/${id_prof}`, {
             method: "PUT",
-            headers: {"Content-Type": "application/json"},
-            body: dataJson
-          });
-  
-          this.getTimes();
+            headers: {"Content-Type": "application/json"}
+            });
+
+            alert(req)
+
+            this.getTimes();
   
         },
     
@@ -311,7 +439,6 @@
 
 
         //POST/time -> Adicionar um time vazio
-        //POST/idTime/idProfissional -> Adicionar um prof ao time
         async postTime(nome){
 
           const dado = {"nomeTime": nome}
@@ -326,13 +453,43 @@
           this.getTimes();
   
         },
-  
 
-        
+
+        //POST/idTime/idProfissional -> Adicionar um prof ao time
+        async postProfTime(id_prof){
+
+            const id_time = this.editedItem.id
+            const req = await fetch(`http://localhost:3000/time/${id_time}/${id_prof}`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"}
+            });
+            alert(req)
+
+            this.getTimes();
+
+        },
+
+
+
         required(inp){
           return !!inp || "Campo obrigatório"
         },
   
+
+        addProf(item){
+            this.editedIndex = this.times.indexOf(item)
+            this.editedItem = Object.assign({}, item)
+            this.add = true;
+        },
+
+        removeProf(item){
+            this.editedIndex = this.times.indexOf(item)
+            this.editedItem = Object.assign({}, item)
+            this.getProfsNoTime(this.editedItem.id)
+            this.rem = true;
+        },
+
+
         viewTeam(item) {
           this.editedIndex = this.times.indexOf(item)
           this.editedItem = Object.assign({}, item)
@@ -354,10 +511,13 @@
         close () {
           this.show = false
           this.dialog = false
+          this.add = false
+          this.rem = false
           this.$nextTick(() => {
             this.editedItem = Object.assign({}, this.defaultItem)
             this.editedIndex = -1
           })
+          this.newProf = ''
         },
   
         closeDelete () {
@@ -370,7 +530,21 @@
         },
   
         save () {
-          this.postTime(this.editedItem.nomeTime)
+          if (this.add){
+            const nome_prof = this.newProf.split(' - ')
+            const id_prof = this.getIDProf(nome_prof[0])
+            this.postProfTime(id_prof)
+        
+          } else if (this.rem){
+            console.log(this.newProf)
+            const nome_prof = this.newProf.split(' - ')
+            console.log(nome_prof[0])
+            const id_prof = this.getIDProf(nome_prof[0])
+            this.putTimes(id_prof)
+
+          } else {
+              this.postTime(this.editedItem.nomeTime)
+          }
           this.close()
         }
       }
