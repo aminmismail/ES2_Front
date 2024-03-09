@@ -536,9 +536,7 @@
             this.postProfTime(id_prof)
         
           } else if (this.rem){
-            console.log(this.newProf)
             const nome_prof = this.newProf.split(' - ')
-            console.log(nome_prof[0])
             const id_prof = this.getIDProf(nome_prof[0])
             this.putTimes(id_prof)
 
