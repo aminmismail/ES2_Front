@@ -504,7 +504,6 @@
         },
   
         deleteTeamConfirm () {
-          this.times.splice(this.editedIndex, 1)
           this.deleteTimes(this.editedItem.id)
           this.closeDelete()
         },

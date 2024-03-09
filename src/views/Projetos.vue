@@ -413,7 +413,6 @@
       },
 
       deleteItemConfirm () {
-        this.projetos.splice(this.editedIndex, 1)
         this.deleteProjetos(this.editedItem.id)
         this.closeDelete()
       },
@@ -436,12 +435,9 @@
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.projetos[this.editedIndex], this.editedItem)
           this.putProjetos(this.editedItem)
         }
         else {
-          this.projetos.push(this.editedItem)
-          console.log(this.editedItem)
           this.postProjetos(this.editedItem)
         }
         this.close()

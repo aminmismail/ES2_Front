@@ -167,16 +167,6 @@
           }
         ]
       }
-    },
-    {
-      "id": "12",
-      "nomeProjeto": "ssa",
-      "nomeCliente": "adas",
-      "objetivoProjeto": "asdsa",
-      "dataInicio": "12",
-      "dataFim": "15",
-      "valorProjeto": "15",
-      "idTime": "1"
     }
   ]
 }

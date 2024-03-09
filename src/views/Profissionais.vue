@@ -346,7 +346,6 @@
       },
 
       deleteItemConfirm () {
-        this.profissionais.splice(this.editedIndex, 1)
         this.deleteProfissionais(this.editedItem.id)
         this.closeDelete()
       },
@@ -369,11 +368,9 @@
 
       save () {
         if (this.editedIndex > -1) {
-          //Object.assign(this.profissionais[this.editedIndex], this.editedItem)
           this.putProfissionais(this.editedItem)
         }
         else {
-          //this.profissionais.push(this.editedItem)
           this.postProfissionais(this.editedItem)
         }
         this.close()
