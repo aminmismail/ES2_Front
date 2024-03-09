@@ -124,6 +124,19 @@
                       md="4"
                       sm="6"
                     >
+                      <v-text-field
+                        v-model="editedItem.valorProjeto"
+                        label="Valor"
+                        hint="Utilize '.' como separador de decimal. Exemplo: 1300.50"
+                        :rules="[required]"
+                      ></v-text-field>
+                    </v-col>
+
+                    <v-col
+                      cols="12"
+                      md="4"
+                      sm="6"
+                    >
                       <v-select
                       label="Time Responsável"
                       v-model="editedItem.timeResponsavel.nomeTime"
@@ -141,8 +154,8 @@
                     class="mx-auto"
                     max-width="300">
 
-                    <v-list-subheader >Profissionais</v-list-subheader>
-                    <v-list :items="this.profsTime" variant="tonal" bg-color="#383131">
+                    <v-list-subheader>Profissionais no Time</v-list-subheader>
+                    <v-list :items="getProfsNoTime(editedItem.timeResponsavel.nomeTime)" variant="tonal" bg-color="#383131">
                     </v-list>
                     </v-card>
                     </v-col>
@@ -280,21 +293,37 @@
     mounted(){
       this.getTimes().then(() => {
         this.nomes_times = this.times.map(time => time.nomeTime);
+        this.getTimeByNome("Time 1")
         this.getProjetos();
     });
     },
 
     methods: {
 
-      getIDTime(time){
-            return this.times.find(time => time.nomeTime === time).id;
-        },
+      getProfsNoTime(nome_time) {
+            return this.times
+            .filter(time => time.nomeTime === nome_time)
+            .map(time => time.idProfissionais)
+            .reduce((nomes, profissionais) => nomes.concat(profissionais.map(profissional => `${profissional.nome} - (${profissional.especialidade.descricao})`)), []);
+      },
+
+      getTimeByID(id_time) {
+          return this.times.find(time => time.id === id_time).nomeTime;
+      },
+
+      getIDTime(time) {
+          return this.times.find(time => time.nomeTime === time).id;
+      },
+
+      getTimeByNome(time) {
+          console.log(this.times.find(time => time.nomeTime === time));
+      },
 
       async getTimes() {
             const response = await fetch("http://localhost:3000/time");
             const data = await response.json();
             this.times = data;
-        },
+      },
 
       async getProjetos() {
           const response = await fetch("http://localhost:3000/projeto");
@@ -303,8 +332,13 @@
       },
         
       async putProjetos(item){
+        console.log(this.editedItem)
         const id = item.id
-        
+        //console.log(item)
+
+        item.timeResponsavel = this.getTimeByNome(this.editedItem.timeResponsavel.nomeTime)
+
+
         const dataJson = JSON.stringify(item);
 
         const req = await fetch(`http://localhost:3000/projeto/${id}`, {
@@ -313,7 +347,7 @@
           body: dataJson
         });
 
-        this.getProjetos();
+        //this.getProjetos();
 
       },
   
@@ -330,15 +364,17 @@
 
       async postProjetos(item){
         
-        item.especialidade = this.getIDbyDesc(item.especialidade.descricao);
+        console.log(item)
 
-        const dataJson = JSON.stringify(item);
+        // item.especialidade = this.getIDbyDesc(item.especialidade.descricao);
 
-        const req = await fetch(`http://localhost:3000/projeto`, {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: dataJson
-        });
+        // const dataJson = JSON.stringify(item);
+
+        // const req = await fetch(`http://localhost:3000/projeto`, {
+        //   method: "POST",
+        //   headers: {"Content-Type": "application/json"},
+        //   body: dataJson
+        // });
 
         this.getProjetos();
 
@@ -382,7 +418,7 @@
 
       closeDelete () {
         this.dialogDelete = false
-        //this.deleteProjetos(this.editedItem.id)
+        this.deleteProjetos(this.editedItem.id)
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
@@ -392,11 +428,11 @@
       save () {
         if (this.editedIndex > -1) {
           Object.assign(this.projetos[this.editedIndex], this.editedItem)
-          //this.putProjetos(this.editedItem)
+          this.putProjetos(this.editedItem)
         }
         else {
           this.projetos.push(this.editedItem)
-          //this.postProjetos(this.editedItem)
+          this.postProjetos(this.editedItem)
         }
         this.close()
       }
