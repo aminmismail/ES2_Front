@@ -3,10 +3,10 @@
     {
       "id": "2",
       "nome": "Maria Torres",
-      "endereço": "Avenida Paulista, 1000",
+      "endere?o": "Avenida Paulista, 1000",
       "genero": "F",
       "dataNasc": "01/08/2002",
-      "raça": "Caucasiana",
+      "ra?a": "Caucasiana",
       "especialidade": {
         "id": 1,
         "descricao": "Developer"
@@ -15,10 +15,10 @@
     {
       "id": "3",
       "nome": "Uilha",
-      "endereço": "Rua caralhos",
+      "endere?o": "Rua caralhos",
       "genero": "Bixa",
       "dataNasc": "16/12/6666",
-      "raça": "Abominavel",
+      "ra?a": "Abominavel",
       "especialidade": {
         "id": 2,
         "descricao": "DBA"
@@ -26,11 +26,11 @@
     },
     {
       "id": "102",
-      "nome": "José Alberto Silveira Santos",
-      "endereço": "Rua rua rua",
+      "nome": "Jos? Alberto Silveira Santos",
+      "endere?o": "Rua rua rua",
       "genero": "Masculino",
       "dataNasc": "11/1/1995",
-      "raça": "Branco",
+      "ra?a": "Branco",
       "especialidade": {
         "id": 1,
         "descricao": "Developer"
@@ -59,10 +59,10 @@
         {
           "id": 5,
           "nome": "Henrique Carvalho",
-          "endereço": "Rua rua rua",
+          "endere?o": "Rua rua rua",
           "genero": "Masculino",
           "dataNasc": "02/03/2019",
-          "raça": "Branco",
+          "ra?a": "Branco",
           "especialidade": {
             "id": 1,
             "descricao": "Developer"
@@ -71,10 +71,10 @@
         {
           "id": 6,
           "nome": "Marcos Lantir",
-          "endereço": "Rua rua rua",
+          "endere?o": "Rua rua rua",
           "genero": "Masculino",
           "dataNasc": "03/02/2002",
-          "raça": "Branco",
+          "ra?a": "Branco",
           "especialidade": {
             "id": 1,
             "descricao": "Developer"
@@ -89,10 +89,10 @@
         {
           "id": 5,
           "nome": "Juliano Pzerkzy",
-          "endereço": "Rua rua rua",
+          "endere?o": "Rua rua rua",
           "genero": "Masculino",
           "dataNasc": "02/03/2019",
-          "raça": "Branco",
+          "ra?a": "Branco",
           "especialidade": {
             "id": 1,
             "descricao": "Designer"
@@ -117,10 +117,10 @@
           {
             "id": 5,
             "nome": "Henrique Carvalho",
-            "endereço": "Rua rua rua",
+            "endere?o": "Rua rua rua",
             "genero": "Masculino",
             "dataNasc": "02/03/2019",
-            "raça": "Branco",
+            "ra?a": "Branco",
             "especialidade": {
               "id": 1,
               "descricao": "Developer"
@@ -129,10 +129,10 @@
           {
             "id": 6,
             "nome": "Marcos Lantir",
-            "endereço": "Rua rua rua",
+            "endere?o": "Rua rua rua",
             "genero": "Masculino",
             "dataNasc": "03/02/2002",
-            "raça": "Branco",
+            "ra?a": "Branco",
             "especialidade": {
               "id": 1,
               "descricao": "Developer"
@@ -150,31 +150,19 @@
       "dataFim": "19/05/2006",
       "valorProjeto": 1500,
       "timeResponsavel": {
-        "id": "1",
-        "nomeTime": "Time 1",
+        "id": "2",
+        "nomeTime": "Segundo time",
         "idProfissionais": [
           {
             "id": 5,
-            "nome": "Henrique Carvalho",
-            "endereço": "Rua rua rua",
+            "nome": "Juliano Pzerkzy",
+            "endere?o": "Rua rua rua",
             "genero": "Masculino",
             "dataNasc": "02/03/2019",
-            "raça": "Branco",
+            "ra?a": "Branco",
             "especialidade": {
               "id": 1,
-              "descricao": "Developer"
-            }
-          },
-          {
-            "id": 6,
-            "nome": "Marcos Lantir",
-            "endereço": "Rua rua rua",
-            "genero": "Masculino",
-            "dataNasc": "03/02/2002",
-            "raça": "Branco",
-            "especialidade": {
-              "id": 1,
-              "descricao": "Developer"
+              "descricao": "Designer"
             }
           }
         ]

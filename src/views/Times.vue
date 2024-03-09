@@ -505,6 +505,7 @@
   
         deleteTeamConfirm () {
           this.times.splice(this.editedIndex, 1)
+          this.deleteTimes(this.editedItem.id)
           this.closeDelete()
         },
   
@@ -522,7 +523,6 @@
   
         closeDelete () {
           this.dialogDelete = false
-          this.deleteTimes(this.editedItem.id)
           this.$nextTick(() => {
             this.editedItem = Object.assign({}, this.defaultItem)
             this.editedIndex = -1

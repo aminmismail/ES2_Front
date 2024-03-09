@@ -50,7 +50,7 @@
                       <v-text-field
                         v-model="editedItem.id"
                         label="ID"
-                        disabled
+                        
                       ></v-text-field>
                     </v-col>
 
@@ -271,7 +271,7 @@
         valorProjeto: 0,
         timeResponsavel: {
           id: '',
-          nomeTime: "",
+          nomeTime: " ",
           idProfissionais: []
         }
       }
@@ -308,9 +308,14 @@
             .reduce((nomes, profissionais) => nomes.concat(profissionais.map(profissional => `${profissional.nome} - (${profissional.especialidade.descricao})`)), []);
       },
 
-      getIDTimeByName(time) {
-          return (this.times.find(time => time.nomeTime == time).id);
-      },
+      getIDTimeByName(nomeTime) {
+        for (let i = 0; i < this.times.length; i++) {
+          if (this.times[i].nomeTime === nomeTime) {
+            return this.times[i].id;
+          }
+        }
+          return null;
+        },
 
       getTimeByNome(nomeTime) {
         for (let i = 0; i < this.times.length; i++) {
@@ -364,15 +369,23 @@
 
       async postProjetos(item){
 
-        item.especialidade = this.getIDbyDesc(item.especialidade.descricao);
+        const time_atual = this.getTimeByNome(item.timeResponsavel.nomeTime);
 
-        const dataJson = JSON.stringify(item);
+        const id_time = time_atual.id
 
-        const req = await fetch(`http://localhost:3000/projeto`, {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: dataJson
-        });
+        delete item.timeResponsavel
+
+        item.idTime = id_time
+
+        console.log(item)
+
+        // const dataJson = JSON.stringify(item);
+
+        // const req = await fetch(`http://localhost:3000/projeto`, {
+        //   method: "POST",
+        //   headers: {"Content-Type": "application/json"},
+        //   body: dataJson
+        // });
 
         this.getProjetos();
 
@@ -403,6 +416,7 @@
 
       deleteItemConfirm () {
         this.projetos.splice(this.editedIndex, 1)
+        this.deleteProjetos(this.editedItem.id)
         this.closeDelete()
       },
 
@@ -416,7 +430,6 @@
 
       closeDelete () {
         this.dialogDelete = false
-        this.deleteProjetos(this.editedItem.id)
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
@@ -426,7 +439,6 @@
       save () {
         if (this.editedIndex > -1) {
           Object.assign(this.projetos[this.editedIndex], this.editedItem)
-          console.log(this.editedItem)
           this.putProjetos(this.editedItem)
         }
         else {

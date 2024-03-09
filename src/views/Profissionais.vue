@@ -347,6 +347,7 @@
 
       deleteItemConfirm () {
         this.profissionais.splice(this.editedIndex, 1)
+        this.deleteProfissionais(this.editedItem.id)
         this.closeDelete()
       },
 
@@ -360,7 +361,6 @@
 
       closeDelete () {
         this.dialogDelete = false
-        this.deleteProfissionais(this.editedItem.id)
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
