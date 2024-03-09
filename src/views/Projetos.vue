@@ -314,8 +314,8 @@
             return this.times[i].id;
           }
         }
-          return null;
-        },
+        return null;
+      },
 
       getTimeByNome(nomeTime) {
         for (let i = 0; i < this.times.length; i++) {
@@ -323,8 +323,8 @@
             return this.times[i];
           }
         }
-          return null;
-        },
+        return null;
+      },
 
       async getTimes() {
             const response = await fetch("http://localhost:3000/time");
@@ -369,23 +369,21 @@
 
       async postProjetos(item){
 
-        const time_atual = this.getTimeByNome(item.timeResponsavel.nomeTime);
+        const item_post = Object.assign({}, item);
 
-        const id_time = time_atual.id
+        const id_time = this.getIDTimeByName(item_post.timeResponsavel.nomeTime);
 
-        delete item.timeResponsavel
+        delete item_post.timeResponsavel
 
-        item.idTime = id_time
+        item_post.idTime = id_time
 
-        console.log(item)
+        const dataJson = JSON.stringify(item_post);
 
-        // const dataJson = JSON.stringify(item);
-
-        // const req = await fetch(`http://localhost:3000/projeto`, {
-        //   method: "POST",
-        //   headers: {"Content-Type": "application/json"},
-        //   body: dataJson
-        // });
+        const req = await fetch(`http://localhost:3000/projeto`, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: dataJson
+        });
 
         this.getProjetos();
 
@@ -443,6 +441,7 @@
         }
         else {
           this.projetos.push(this.editedItem)
+          console.log(this.editedItem)
           this.postProjetos(this.editedItem)
         }
         this.close()
