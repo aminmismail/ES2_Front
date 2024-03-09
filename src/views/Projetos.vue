@@ -138,10 +138,9 @@
                       sm="6"
                     >
                       <v-select
-                      label="Time Responsável"
                       v-model="editedItem.timeResponsavel.nomeTime"
+                      label="Time Responsável"
                       :items="nomes_times"
-                      :rules="[required]"
                       ></v-select>
                     </v-col>
 
@@ -246,7 +245,9 @@
       nomes_times: [],
       profsTime: [],
       editedIndex: -1,
+
       editedItem: {
+        id: '',
         nomeProjeto: "",
         nomeCliente: "",
         objetivoProjeto: "",
@@ -254,13 +255,14 @@
         dataFim: "",
         valorProjeto: 0,
         timeResponsavel: {
-          id: 0,
+          id: '',
           nomeTime: "",
           idProfissionais: []
         }
       },
 
       defaultItem: {
+        id: '',
         nomeProjeto: "",
         nomeCliente: "",
         objetivoProjeto: "",
@@ -268,7 +270,7 @@
         dataFim: "",
         valorProjeto: 0,
         timeResponsavel: {
-          id: 0,
+          id: '',
           nomeTime: "",
           idProfissionais: []
         }
@@ -293,7 +295,6 @@
     mounted(){
       this.getTimes().then(() => {
         this.nomes_times = this.times.map(time => time.nomeTime);
-        this.getTimeByNome("Time 1")
         this.getProjetos();
     });
     },
@@ -307,17 +308,18 @@
             .reduce((nomes, profissionais) => nomes.concat(profissionais.map(profissional => `${profissional.nome} - (${profissional.especialidade.descricao})`)), []);
       },
 
-      getTimeByID(id_time) {
-          return this.times.find(time => time.id === id_time).nomeTime;
+      getIDTimeByName(time) {
+          return (this.times.find(time => time.nomeTime == time).id);
       },
 
-      getIDTime(time) {
-          return this.times.find(time => time.nomeTime === time).id;
-      },
-
-      getTimeByNome(time) {
-          console.log(this.times.find(time => time.nomeTime === time));
-      },
+      getTimeByNome(nomeTime) {
+        for (let i = 0; i < this.times.length; i++) {
+          if (this.times[i].nomeTime === nomeTime) {
+            return this.times[i];
+          }
+        }
+          return null;
+        },
 
       async getTimes() {
             const response = await fetch("http://localhost:3000/time");
@@ -332,22 +334,20 @@
       },
         
       async putProjetos(item){
-        console.log(this.editedItem)
-        const id = item.id
-        //console.log(item)
 
-        item.timeResponsavel = this.getTimeByNome(this.editedItem.timeResponsavel.nomeTime)
+        const id_proj = item.id
 
+        item.timeResponsavel = this.getTimeByNome(item.timeResponsavel.nomeTime);
 
         const dataJson = JSON.stringify(item);
 
-        const req = await fetch(`http://localhost:3000/projeto/${id}`, {
+        const req = await fetch(`http://localhost:3000/projeto/${id_proj}`, {
           method: "PUT",
           headers: {"Content-Type": "application/json"},
           body: dataJson
         });
 
-        //this.getProjetos();
+        this.getProjetos();
 
       },
   
@@ -363,18 +363,16 @@
       },
 
       async postProjetos(item){
-        
-        console.log(item)
 
-        // item.especialidade = this.getIDbyDesc(item.especialidade.descricao);
+        item.especialidade = this.getIDbyDesc(item.especialidade.descricao);
 
-        // const dataJson = JSON.stringify(item);
+        const dataJson = JSON.stringify(item);
 
-        // const req = await fetch(`http://localhost:3000/projeto`, {
-        //   method: "POST",
-        //   headers: {"Content-Type": "application/json"},
-        //   body: dataJson
-        // });
+        const req = await fetch(`http://localhost:3000/projeto`, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: dataJson
+        });
 
         this.getProjetos();
 
@@ -428,6 +426,7 @@
       save () {
         if (this.editedIndex > -1) {
           Object.assign(this.projetos[this.editedIndex], this.editedItem)
+          console.log(this.editedItem)
           this.putProjetos(this.editedItem)
         }
         else {
