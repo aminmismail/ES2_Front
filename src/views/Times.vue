@@ -396,7 +396,7 @@
         },
 
         async getProfissionais() {
-            const response = await fetch("http://backend:8080/profissional");
+            const response = await fetch("http://54.173.113.77:8080/profissional");
             const data = await response.json();
             this.profissionais = data;
             this.getNomes();
@@ -404,7 +404,7 @@
   
         // GET -> Obtem todos os times
         async getTimes() {
-            const response = await fetch("http://backend:8080/time");
+            const response = await fetch("http://54.173.113.77:8080/time");
             const data = await response.json();
             this.times = data;
         },
@@ -414,26 +414,24 @@
         async putTimes(id_prof){
 
             const id_time = this.editedItem.id
-            const req = await fetch(`http://backend:8080/time/${id_time}/${id_prof}`, {
+            const req = await fetch(`http://54.173.113.77:8080/time/${id_time}/${id_prof}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"}
             });
 
-            alert(req)
-
-            this.getTimes();
+            setTimeout(() => this.getTimes(), 500);
   
         },
     
         //DELETE -> Deletar um time
         async deleteTimes(id){
-          const req = await fetch(`http://backend:8080/time/${id}`, {
+          const req = await fetch(`http://54.173.113.77:8080/time/${id}`, {
             method: "DELETE"
           });
   
           const res = await req.json();
   
-          this.getTimes();
+          setTimeout(() => this.getTimes(), 500);
   
         },
 
@@ -444,13 +442,13 @@
           const dado = {"nomeTime": nome}
           const dataJson = JSON.stringify(dado);
   
-          const req = await fetch(`http://backend:8080/time`, {
+          const req = await fetch(`http://54.173.113.77:8080/time`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: dataJson
           });
   
-          this.getTimes();
+          setTimeout(() => this.getTimes(), 500);
   
         },
 
@@ -459,13 +457,12 @@
         async postProfTime(id_prof){
 
             const id_time = this.editedItem.id
-            const req = await fetch(`http://backend:8080/time/${id_time}/${id_prof}`, {
+            const req = await fetch(`http://54.173.113.77:8080/time/${id_time}/${id_prof}`, {
             method: "POST",
             headers: {"Content-Type": "application/json"}
             });
-            alert(req)
 
-            this.getTimes();
+            setTimeout(() => this.getTimes(), 500);
 
         },
 
@@ -506,6 +503,7 @@
         deleteTeamConfirm () {
           this.deleteTimes(this.editedItem.id)
           this.closeDelete()
+          this.getTimes()
         },
   
         close () {

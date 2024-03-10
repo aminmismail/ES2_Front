@@ -327,13 +327,13 @@
       },
 
       async getTimes() {
-            const response = await fetch("http://backend:8080/time");
+            const response = await fetch("http://54.173.113.77:8080/time");
             const data = await response.json();
             this.times = data;
       },
 
       async getProjetos() {
-          const response = await fetch("http://backend:8080/projeto");
+          const response = await fetch("http://54.173.113.77:8080/projeto");
           const data = await response.json();
           this.projetos = data;
       },
@@ -346,24 +346,24 @@
 
         const dataJson = JSON.stringify(item);
 
-        const req = await fetch(`http://backend:8080/projeto/${id_proj}`, {
+        const req = await fetch(`http://54.173.113.77:8080/projeto/${id_proj}`, {
           method: "PUT",
           headers: {"Content-Type": "application/json"},
-          body: dataJson
+          body: dataJson,
         });
 
-        this.getProjetos();
+        setTimeout(() => this.getProjetos(), 500);
 
       },
   
       async deleteProjetos(id){
-        const req = await fetch(`http://backend:8080/projeto/${id}`, {
+        const req = await fetch(`http://54.173.113.77:8080/projeto/${id}`, {
           method: "DELETE"
         });
 
         const res = await req.json();
 
-        this.getProjetos();
+        setTimeout(() => this.getProjetos(), 500);
 
       },
 
@@ -379,13 +379,13 @@
 
         const dataJson = JSON.stringify(item_post);
 
-        const req = await fetch(`http://backend:8080/projeto`, {
+        const req = await fetch(`http://54.173.113.77:8080/projeto`, {
           method: "POST",
           headers: {"Content-Type": "application/json"},
           body: dataJson
         });
 
-        this.getProjetos();
+        setTimeout(() => this.getProjetos(), 500);
 
       },
 
@@ -415,6 +415,7 @@
       deleteItemConfirm () {
         this.deleteProjetos(this.editedItem.id)
         this.closeDelete()
+        this.getProjetos()
       },
 
       close () {

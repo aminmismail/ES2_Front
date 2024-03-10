@@ -269,13 +269,13 @@
       },
 
       async getEspecialidades() {
-        const response = await fetch("http://backend:8080/especialidade");
+        const response = await fetch("http://54.173.113.77:8080/especialidade");
         const data = await response.json();
         this.especialidades = data;
       },
 
       async getProfissionais() {
-          const response = await fetch("http://backend:8080/profissional");
+          const response = await fetch("http://54.173.113.77:8080/profissional");
           const data = await response.json();
           this.profissionais = data;
       },
@@ -285,24 +285,24 @@
         
         const dataJson = JSON.stringify(item);
 
-        const req = await fetch(`http://backend:8080/profissional/${id}`, {
+        const req = await fetch(`http://54.173.113.77:8080/profissional/${id}`, {
           method: "PUT",
           headers: {"Content-Type": "application/json"},
           body: dataJson
         });
 
-        this.getProfissionais();
+        setTimeout(() => this.getProfissionais(), 500);
 
       },
   
       async deleteProfissionais(id){
-        const req = await fetch(`http://backend:8080/profissional/${id}`, {
+        const req = await fetch(`http://54.173.113.77:8080/profissional/${id}`, {
           method: "DELETE"
         });
 
         const res = await req.json();
 
-        this.getProfissionais();
+        setTimeout(() => this.getProfissionais(), 500);
 
       },
 
@@ -312,13 +312,13 @@
 
         const dataJson = JSON.stringify(item);
 
-        const req = await fetch(`http://backend:8080/profissional`, {
+        const req = await fetch(`http://54.173.113.77:8080/profissional`, {
           method: "POST",
           headers: {"Content-Type": "application/json"},
           body: dataJson
         });
 
-        this.getProfissionais();
+        setTimeout(() => this.getProfissionais(), 500);
 
       },
 
@@ -348,6 +348,7 @@
       deleteItemConfirm () {
         this.deleteProfissionais(this.editedItem.id)
         this.closeDelete()
+        this.getProfissionais()
       },
 
       close () {
