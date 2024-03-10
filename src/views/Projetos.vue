@@ -50,7 +50,7 @@
                       <v-text-field
                         v-model="editedItem.id"
                         label="ID"
-                        
+                        disabled
                       ></v-text-field>
                     </v-col>
 
@@ -327,13 +327,13 @@
       },
 
       async getTimes() {
-            const response = await fetch("http://localhost:3000/time");
+            const response = await fetch("http://backend:8080/time");
             const data = await response.json();
             this.times = data;
       },
 
       async getProjetos() {
-          const response = await fetch("http://localhost:3000/projeto");
+          const response = await fetch("http://backend:8080/projeto");
           const data = await response.json();
           this.projetos = data;
       },
@@ -346,7 +346,7 @@
 
         const dataJson = JSON.stringify(item);
 
-        const req = await fetch(`http://localhost:3000/projeto/${id_proj}`, {
+        const req = await fetch(`http://backend:8080/projeto/${id_proj}`, {
           method: "PUT",
           headers: {"Content-Type": "application/json"},
           body: dataJson
@@ -357,7 +357,7 @@
       },
   
       async deleteProjetos(id){
-        const req = await fetch(`http://localhost:3000/projeto/${id}`, {
+        const req = await fetch(`http://backend:8080/projeto/${id}`, {
           method: "DELETE"
         });
 
@@ -379,7 +379,7 @@
 
         const dataJson = JSON.stringify(item_post);
 
-        const req = await fetch(`http://localhost:3000/projeto`, {
+        const req = await fetch(`http://backend:8080/projeto`, {
           method: "POST",
           headers: {"Content-Type": "application/json"},
           body: dataJson

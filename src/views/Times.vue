@@ -396,7 +396,7 @@
         },
 
         async getProfissionais() {
-            const response = await fetch("http://localhost:3000/profissional");
+            const response = await fetch("http://backend:8080/profissional");
             const data = await response.json();
             this.profissionais = data;
             this.getNomes();
@@ -404,7 +404,7 @@
   
         // GET -> Obtem todos os times
         async getTimes() {
-            const response = await fetch("http://localhost:3000/time");
+            const response = await fetch("http://backend:8080/time");
             const data = await response.json();
             this.times = data;
         },
@@ -414,7 +414,7 @@
         async putTimes(id_prof){
 
             const id_time = this.editedItem.id
-            const req = await fetch(`http://localhost:3000/time/${id_time}/${id_prof}`, {
+            const req = await fetch(`http://backend:8080/time/${id_time}/${id_prof}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"}
             });
@@ -427,7 +427,7 @@
     
         //DELETE -> Deletar um time
         async deleteTimes(id){
-          const req = await fetch(`http://localhost:3000/time/${id}`, {
+          const req = await fetch(`http://backend:8080/time/${id}`, {
             method: "DELETE"
           });
   
@@ -444,7 +444,7 @@
           const dado = {"nomeTime": nome}
           const dataJson = JSON.stringify(dado);
   
-          const req = await fetch(`http://localhost:3000/time`, {
+          const req = await fetch(`http://backend:8080/time`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: dataJson
@@ -459,7 +459,7 @@
         async postProfTime(id_prof){
 
             const id_time = this.editedItem.id
-            const req = await fetch(`http://localhost:3000/time/${id_time}/${id_prof}`, {
+            const req = await fetch(`http://backend:8080/time/${id_time}/${id_prof}`, {
             method: "POST",
             headers: {"Content-Type": "application/json"}
             });
