@@ -1,8 +1,8 @@
 version: '3.4'
 
 services:
-  es2scrum:
-    image: es2scrum
+  front:
+    image: front
     build:
       context: .
       dockerfile: ./Dockerfile
