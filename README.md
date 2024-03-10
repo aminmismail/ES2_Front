@@ -11,7 +11,7 @@ Este repositório contém o código-fonte para a parte de Front-End do software 
 ### Tecnologias:
 
 - Linguagem de programação: JavaScript;
-- Frameworks: Vue 3;
+- Frameworks: Vue 3 + Vite;
 - APIs: Fetch API;
 - Conceitos: SPA (Single Page Application).
 
